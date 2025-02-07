@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحميل فيديو</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f8f9fa;
+        }
+        h2 {
+            color: #333;
+        }
+        input {
+            width: 60%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        p {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #28a745;
+        }
+        .error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>أدخل رابط الفيديو لتنزيله</h2>
+    <input type="text" id="video_url" placeholder="الصق رابط الفيديو هنا">
+    <button onclick="downloadVideo()">تحميل</button>
+    <p id="status"></p>
+
+    <script>
+        function downloadVideo() {
+            let url = document.getElementById("video_url").value;
+            let status = document.getElementById("status");
+
+            if (!url) {
+                status.innerText = "الرجاء إدخال رابط الفيديو!";
+                status.className = "error";
+                return;
+            }
+
+            status.innerText = "جاري التحميل...";
+            status.className = "";
+
+            fetch('/download', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                status.innerText = data.message;
+                status.className = data.message.includes("خطأ") ? "error" : "";
+            })
+            .catch(error => {
+                status.innerText = "حدث خطأ أثناء الاتصال بالسيرفر.";
+                status.className = "error";
+            });
+        }
+    </script>
+
+</body>
+</html>
